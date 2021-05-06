@@ -20,5 +20,5 @@ export interface SubscriptionParamsType extends BaseParamsType {
   deliveryCountry?: string;
   items?: [Item];
   // Startup fee
-  startupFee?: string;
+  startupFee?: number;
 }

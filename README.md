@@ -12,7 +12,7 @@ Have a look at [example code](/examples) or the [demo React.js app](https://pavi
 
 ## Features
 
-- Works in front end JS frameworks
+- Works in front end JS frameworks and Node.js apps
 - Making one time payments with Checkout API
 - Making Recurrent payments with Recurring API (monthly, daily. annually)
 - Get payments data of your Payhere account using Retrieval API
@@ -46,6 +46,20 @@ Payhere.init("12xxxxx",AccountCategory.SANDBOX)
 Payhere.init("12xxxxx",AccountCategory.LIVE)
 ```
 
+If you plan to use charging using preapproval tokens, Payhere should be initialized with the merchant secret as follows. 
+
+**Note: All operations that involve merchant secret should happen on the server- side**
+
+```
+import {Payhere, AccountCategory} from "payhere-js-sdk"
+
+// Sandbox 
+Payhere.init("12xxxxx",AccountCategory.SANDBOX,process.env.PAYHERE_MERCHANT_SECRET)
+
+// Live
+Payhere.init("12xxxxx",AccountCategory.LIVE,process.env.PAYHERE_MERCHANT_SECRET)
+```
+
 ### Checkout
 
 ``` 
@@ -60,7 +74,7 @@ function checkout() {
     first_name: "Pavindu",
     last_name: "Lakshan",
     phone: "+94771234567",
-    email: "plumberhl@gmail.com",
+    email: "demo@example.com",
     address: "No. 50, Highlevel Road",
     city: "Panadura",
     country: "Sri Lanka",
@@ -73,7 +87,26 @@ function checkout() {
     order_id: '112233',
     itemTitle: 'Demo Item',
     currency: CurrencyType.LKR,
-    amount: 100
+    amount: 100,
+    // optional parameters
+    platform: "demo-web-store";
+    custom1: "some custom value";
+    custom2: "another custom value";
+    hash: "computed_hash_value",
+    deliveryAddress: "No. 50, Highlevel Road",
+    deliveryCity: "Panadura",
+    deliveryCountry: "Sri Lanka",
+    items: [{
+      name: "Demo Item - Red"
+      modelNo: "DI-1001"
+      amount: 100
+      quantity: 2
+    },{
+      name: "Demo Item - Blue"
+      modelNo: "DI-1002"
+      amount: 100
+      quantity: 1
+    }]
   })
 
   const checkout = new PayhereCheckout(customer,checkoutData,onPayhereCheckoutError)
@@ -111,7 +144,27 @@ function initSubscription() {
       recurrence: new Month(1),
       duration: new Month(12),
       currency: CurrencyType.LKR,
-      amount: 100
+      amount: 100,
+      // optional parameters
+      platform: "demo-web-store";
+      custom1: "some custom value";
+      custom2: "another custom value";
+      hash: "computed_hash_value",
+      deliveryAddress: "No. 50, Highlevel Road",
+      deliveryCity: "Panadura",
+      deliveryCountry: "Sri Lanka",
+      items: [{
+        name: "Demo Item - Red"
+        modelNo: "DI-1001"
+        amount: 100
+        quantity: 2
+      },{
+        name: "Demo Item - Blue"
+        modelNo: "DI-1002"
+        amount: 100
+        quantity: 1
+      }],
+      startupFee: 250 
     })
           
     const subscription = new PayhereSubscription(customer,subscriptionData,onPayhereSubscriptionError)
@@ -144,7 +197,12 @@ function preApprove() {
     notifyUrl: 'https://dfc84fd10430.ngrok.io/preapprove-notify',
     order_id: '112235',
     itemTitle: 'Demo Item',
-    currency: CurrencyType.LKR
+    currency: CurrencyType.LKR,
+    // optional parameters
+    platform: "demo-web-store";
+    custom1: "some custom value";
+    custom2: "another custom value";
+    hash: "computed_hash_value",
   })
   
   const preapp = new PayherePreapproval(customer,preappParams,(err) => alert(err))
